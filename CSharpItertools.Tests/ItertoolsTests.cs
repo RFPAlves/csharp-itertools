@@ -1,4 +1,5 @@
 ﻿using CSharpItertools.Interfaces;
+using Microsoft.VisualBasic;
 using System.Collections.Generic;
 using Xunit;
 
@@ -51,7 +52,6 @@ namespace CSharpItertools.Tests
             var iterable2 = new int[] { };
 
             var actual = new List<(int, int)>(itertools.IZip(iterable1, iterable2));
-            
             var expected = new List<(int, int)>();
 
             Assert.Equal(actual, expected);
@@ -72,6 +72,54 @@ namespace CSharpItertools.Tests
                 (2.7, 0x04),
                 (8.45, null)
             };
+
+            Assert.Equal(actual, expected);
+        }
+
+        [Fact]
+        public void CombinationsOfElements()
+        {
+            var iterable = new[] { "A", "B", "C" };
+
+            var actual = new List<IEnumerable<string>>(itertools.Combinations(iterable, 2));
+
+            var expected = new List<IEnumerable<string>>
+            {
+                new[] { "A", "B" },
+                new[] { "A", "C" },
+                new[] { "B", "C" }
+            };
+
+            Assert.Equal(actual, expected);
+        }
+
+        [Fact]
+        public void CombinationsOfDifferentsTypeOfElements()
+        {
+            var iterable = new object[] { 1, 'A', true, "Hi" };
+
+            var actual = new List<IEnumerable<object>>(itertools.Combinations(iterable, 2));
+
+            var expected = new List<IEnumerable<object>>
+            {
+                new object[] { 1, 'A' },
+                new object[] { 1, true },
+                new object[] { 1, "Hi" },
+                new object[] { 'A', true },
+                new object[] { 'A', "Hi" },
+                new object[] { true, "Hi" }
+            };
+
+            Assert.Equal(actual, expected);
+        }
+
+        [Fact]
+        public void CombinationsLengthBiggerThanIterable()
+        {
+            var iterable = new[] { 'C' };
+
+            var actual = new List<IEnumerable<char>>(itertools.Combinations(iterable, 2));
+            var expected = new List<IEnumerable<char>>();
 
             Assert.Equal(actual, expected);
         }
