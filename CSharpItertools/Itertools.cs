@@ -1,4 +1,5 @@
 ﻿using CSharpItertools.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -78,6 +79,40 @@ namespace CSharpItertools
                 output = range.Select(x => iterable.ElementAt(x)).ToArray();
 
                 yield return output;
+            }
+        }
+
+        public IEnumerable<T> IFilter<T>(Predicate<T> predicate, IEnumerable<T> iterable)
+        {
+            foreach (var item in iterable)
+                if (predicate(item)) yield return item;
+        }
+
+        public IEnumerable<T> IFilterFalse<T>(Predicate<T> predicate, IEnumerable<T> iterable)
+        {
+            foreach (var item in iterable)
+                if (!predicate(item)) yield return item;
+        }
+
+        public IEnumerable<T> ISlice<T>(IEnumerable<T> iterable, int start, int? stop = null, int step = 1)
+        {
+            IEnumerable<int> XRange(int startRange, int stopRange, int stepRange = 1)
+            {
+                for (; startRange < stopRange; startRange += stepRange)
+                    yield return startRange;
+            }
+
+            stop = stop ?? iterable.Count();
+
+            IEnumerator<int> iterator = XRange(start, stop.Value, step).GetEnumerator();
+
+            while (iterator.MoveNext())
+            {
+                foreach ((int Index, T Item) in IZip(Enumerable.Range(0, iterable.Count()), iterable))
+                {
+                    if (iterator.Current == Index)
+                        yield return Item;
+                }
             }
         }
     }
