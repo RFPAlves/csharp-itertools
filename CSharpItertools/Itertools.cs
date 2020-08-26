@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace CSharpItertools
 {
@@ -105,14 +106,41 @@ namespace CSharpItertools
             stop = stop ?? iterable.Count();
 
             IEnumerator<int> iterator = XRange(start, stop.Value, step).GetEnumerator();
+            IEnumerable<(int, T)> iterableIndexed = IZip(Enumerable.Range(0, iterable.Count()), iterable);
 
             while (iterator.MoveNext())
             {
-                foreach ((int Index, T Item) in IZip(Enumerable.Range(0, iterable.Count()), iterable))
+                foreach ((int Index, T Item) in iterableIndexed)
                 {
                     if (iterator.Current == Index)
                         yield return Item;
                 }
+            }
+        }
+
+        public IEnumerable<T> Cycle<T>(IEnumerable<T> iterable)
+        {
+            ICollection<T> collection = new List<T>(iterable.Count());
+
+            foreach (T element in iterable)
+            {
+                yield return element;
+                collection.Add(element);
+            }
+
+            while (true)
+            {
+                foreach (T element in collection)
+                    yield return element;
+            }
+        }
+
+        public IEnumerable<T> Compress<T>(IEnumerable<T> iterable, IEnumerable<object> selectors)
+        {
+            foreach ((T Item, object Selector) in IZip(iterable, selectors))
+            {
+                if (Convert.ToBoolean(Selector.GetHashCode()))
+                    yield return Item;
             }
         }
     }

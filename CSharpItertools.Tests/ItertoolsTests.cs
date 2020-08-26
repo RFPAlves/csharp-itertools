@@ -1,4 +1,5 @@
 ﻿using CSharpItertools.Interfaces;
+using System;
 using System.Collections.Generic;
 using Xunit;
 
@@ -174,6 +175,53 @@ namespace CSharpItertools.Tests
 
             var actual = itertools.ISlice(iterable, 0, step: 2);
             var expected = new List<object> { 'A', 0x04, 0.11, 'B' };
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void CycleElements()
+        {
+            var iterable = new[] { "A", "B", "C" };
+
+            var actual = new List<string>(10);
+
+            int i = 0;
+            foreach (string element in itertools.Cycle(iterable))
+            {
+                actual.Add(element);
+                if (++i >= 10) break;
+            }
+
+            var expected = new List<string> { "A", "B", "C", "A", "B", "C", "A", "B", "C", "A" };
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void CompressElementsWithNumericSelectors()
+        {
+            var iterable = new[] { 'X', 'Y', 'Z', 'W' };
+            var selectors = new object[] { 1, 0, 1, 0 };
+
+            var actual = itertools.Compress(iterable, selectors);
+            var expected = new List<char> { 'X', 'Z' };
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void CompressElementsWithBooleanSelections()
+        {
+            var iterable = new[] { TimeSpan.FromDays(1), TimeSpan.FromDays(2), TimeSpan.FromDays(3) };
+            var selectors = new object[] { true, false, true };
+
+            var actual = itertools.Compress(iterable, selectors);
+            var expected = new List<TimeSpan>
+            {
+                TimeSpan.FromDays(1),
+                TimeSpan.FromDays(3)
+            };
 
             Assert.Equal(expected, actual);
         }
