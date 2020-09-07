@@ -213,8 +213,8 @@ namespace CSharpItertools.Tests
         [Fact]
         public void CompressElementsWithBooleanSelections()
         {
-            var iterable = new[] { TimeSpan.FromDays(1), TimeSpan.FromDays(2), TimeSpan.FromDays(3) };
-            var selectors = new object[] { true, false, true };
+            var iterable = new[] { TimeSpan.FromDays(1), TimeSpan.FromDays(2), TimeSpan.FromDays(3), TimeSpan.FromDays(4) };
+            var selectors = new object[] { true, false, true, null };
 
             var actual = itertools.Compress(iterable, selectors);
             var expected = new List<TimeSpan>

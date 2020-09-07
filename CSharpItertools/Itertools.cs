@@ -139,7 +139,7 @@ namespace CSharpItertools
         {
             foreach ((T Item, object Selector) in IZip(iterable, selectors))
             {
-                if (Convert.ToBoolean(Selector.GetHashCode()))
+                if (Selector != null && Convert.ToBoolean(Selector.GetHashCode()))
                     yield return Item;
             }
         }
