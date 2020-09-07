@@ -47,12 +47,12 @@ namespace CSharpItertools.Collections
             return customArray;
         }
 
-        public static implicit operator T[](CustomArray<T> a)
+        public static implicit operator T[](CustomArray<T> customArray)
         {
-            var arr = new T[a.Length];
+            var arr = new T[customArray.Length];
 
-            for (int i = 0; i < a.Length; i++)
-                arr[i] = a[i];
+            for (int i = 0; i < customArray.Length; i++)
+                arr[i] = customArray[i];
 
             return arr;
         }
