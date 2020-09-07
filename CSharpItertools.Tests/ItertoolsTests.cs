@@ -15,7 +15,7 @@ namespace CSharpItertools.Tests
             var iterable1 = new[] { "A", "B", "C" };
             var iterable2 = new[] { 1, 2, 3 };
 
-            var actual = itertools.IZip(iterable1, iterable2);
+            var actual = itertools.Zip(iterable1, iterable2);
 
             var expected = new List<(string, int)>
             {
@@ -33,7 +33,7 @@ namespace CSharpItertools.Tests
             var iterable1 = "Itertools";
             var iterable2 = new[] { true, false, false };
 
-            var actual = itertools.IZip(iterable1, iterable2);
+            var actual = itertools.Zip(iterable1, iterable2);
 
             var expected = new List<(char, bool)>
             {
@@ -51,7 +51,7 @@ namespace CSharpItertools.Tests
             var iterable1 = new int[] { };
             var iterable2 = new int[] { };
 
-            var actual = itertools.IZip(iterable1, iterable2);
+            var actual = itertools.Zip(iterable1, iterable2);
             var expected = new List<(int, int)>();
 
             Assert.Equal(expected, actual);
@@ -63,7 +63,7 @@ namespace CSharpItertools.Tests
             var iterable1 = new[] { 1.2, 0.98, 2.7, 8.45 };
             var iterable2 = new[] { 0x01, 0x02, 0x04 };
 
-            var actual = itertools.IZipLongest(iterable1, iterable2);
+            var actual = itertools.ZipLongest(iterable1, iterable2);
 
             var expected = new List<(object, object)>
             {
@@ -125,33 +125,11 @@ namespace CSharpItertools.Tests
         }
 
         [Fact]
-        public void IFilterOddElements()
-        {
-            var iterable = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-
-            var actual = itertools.IFilter(x => x % 2 > 0, iterable);
-            var expected = new List<int> { 1, 3, 5, 7, 9 };
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void IFilterIterableElements()
-        {
-            var iterable = new object[] { 1, true, "IFilter" , 'C'};
-
-            var actual = itertools.IFilter(x => x.GetType().GetInterface("IEnumerable") != null, iterable);
-            var expected = new List<object> { "IFilter" };
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
         public void IFilterFalseOddElements()
         {
             var iterable = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-            var actual = itertools.IFilterFalse(x => x % 2 > 0, iterable);
+            var actual = itertools.FilterFalse(x => x % 2 > 0, iterable);
             var expected = new List<int> { 2, 4, 6, 8 };
 
             Assert.Equal(expected, actual);
@@ -251,7 +229,7 @@ namespace CSharpItertools.Tests
         }
 
         [Fact]
-        public void ProductOfInputIterablesAsInteger()
+        public void ProductOfIterablesAsInteger()
         {
             var iterable1 = new List<int> { 1, 2, 3 };
             var iterable2 = new List<int> { 6, 7 };
@@ -266,6 +244,29 @@ namespace CSharpItertools.Tests
                 new int[] { 2, 7 },
                 new int[] { 3, 6 },
                 new int[] { 3, 7 }
+            };
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void ProductOfRepeatIterables()
+        {
+            var iterable = new char[] { 'X', 'Y', 'Z' };
+
+            var actual = itertools.Product(iterable, repeat: 2);
+
+            var expected = new List<char[]>
+            {
+                new char[] { 'X', 'X' },
+                new char[] { 'X', 'Y' },
+                new char[] { 'X', 'Z' },
+                new char[] { 'Y', 'X' },
+                new char[] { 'Y', 'Y' },
+                new char[] { 'Y', 'Z' },
+                new char[] { 'Z', 'X' },
+                new char[] { 'Z', 'Y' },
+                new char[] { 'Z', 'Z' },
             };
 
             Assert.Equal(expected, actual);

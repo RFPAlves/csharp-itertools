@@ -8,30 +8,19 @@ namespace CSharpItertools.Interfaces
         /// <summary>
         /// Make an iterator that aggregates elements from each of the iterables.
         /// </summary>
-        IEnumerable<(T1, T2)> IZip<T1, T2>(IEnumerable<T1> iterable1, IEnumerable<T2> iterable2);
+        IEnumerable<(T1, T2)> Zip<T1, T2>(IEnumerable<T1> iterable1, IEnumerable<T2> iterable2);
         
         /// <summary>
         /// Make an iterator that aggregates elements from each of the iterables.
         /// If the iterables are of uneven length, missing values are filled-in with null.
         /// </summary>
-        IEnumerable<(object, object)> IZipLongest<T1, T2>(IEnumerable<T1> iterable1, IEnumerable<T2> iterable2);
+        IEnumerable<(object, object)> ZipLongest<T1, T2>(IEnumerable<T1> iterable1, IEnumerable<T2> iterable2);
         
-        /// <summary>
-        /// Return r length subsequences of elements from the input iterable
-        /// </summary>
-        IEnumerable<IEnumerable<T>> Combinations<T>(IEnumerable<T> iterable, int r);
-
-        /// <summary>
-        /// Make an iterator that filters elements from iterable returning only
-        /// those for which the predicate is true.
-        /// </summary>
-        IEnumerable<T> IFilter<T>(Predicate<T> predicate, IEnumerable<T> iterable);
-
         /// <summary>
         /// Make an iterator that filters elements from iterable returning only
         /// those for which the predicate is false.
         /// </summary>
-        IEnumerable<T> IFilterFalse<T>(Predicate<T> predicate, IEnumerable<T> iterable);
+        IEnumerable<T> FilterFalse<T>(Predicate<T> predicate, IEnumerable<T> iterable);
 
         /// <summary>
         /// Make an iterator that returns selected elements from the iterable.
@@ -53,5 +42,15 @@ namespace CSharpItertools.Interfaces
         /// Cartesian product of input iterables.
         /// </summary>
         IEnumerable<T[]> Product<T>(params IEnumerable<T>[] iterables);
+
+        /// <summary>
+        /// Cartesian product of input iterables.
+        /// </summary>
+        IEnumerable<T[]> Product<T>(IEnumerable<T> iterable, int repeat);
+
+        /// <summary>
+        /// Return r length subsequences of elements from the input iterable
+        /// </summary>
+        IEnumerable<IEnumerable<T>> Combinations<T>(IEnumerable<T> iterable, int r);
     }
 }

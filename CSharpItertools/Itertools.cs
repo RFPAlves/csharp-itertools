@@ -8,7 +8,7 @@ namespace CSharpItertools
 {
     public class Itertools : IItertools
     {
-        public IEnumerable<(T1, T2)> IZip<T1, T2>(IEnumerable<T1> iterable1, IEnumerable<T2> iterable2)
+        public IEnumerable<(T1, T2)> Zip<T1, T2>(IEnumerable<T1> iterable1, IEnumerable<T2> iterable2)
         {
             IEnumerator<T1> Enumerator1 = iterable1.GetEnumerator();
             IEnumerator<T2> Enumerator2 = iterable2.GetEnumerator();
@@ -19,7 +19,7 @@ namespace CSharpItertools
             }
         }
 
-        public IEnumerable<(object, object)> IZipLongest<T1, T2>(IEnumerable<T1> iterable1, IEnumerable<T2> iterable2)
+        public IEnumerable<(object, object)> ZipLongest<T1, T2>(IEnumerable<T1> iterable1, IEnumerable<T2> iterable2)
         {
             IEnumerator<T1> Enumerator1 = iterable1.GetEnumerator();
             IEnumerator<T2> Enumerator2 = iterable2.GetEnumerator();
@@ -37,6 +37,91 @@ namespace CSharpItertools
 
                 yield return (output1, output2);
             }
+        }
+
+        public IEnumerable<T> FilterFalse<T>(Predicate<T> predicate, IEnumerable<T> iterable)
+        {
+            foreach (var item in iterable)
+                if (!predicate(item)) yield return item;
+        }
+
+        public IEnumerable<T> ISlice<T>(IEnumerable<T> iterable, int start, int? stop = null, int step = 1)
+        {
+            IEnumerable<int> XRange(int startRange, int stopRange, int stepRange = 1)
+            {
+                for (; startRange < stopRange; startRange += stepRange)
+                    yield return startRange;
+            }
+
+            stop = stop ?? iterable.Count();
+
+            IEnumerator<int> iterator = XRange(start, stop.Value, step).GetEnumerator();
+            IEnumerable<(int, T)> iterableIndexed = Zip(Enumerable.Range(0, iterable.Count()), iterable);
+
+            while (iterator.MoveNext())
+            {
+                foreach ((int Index, T Item) in iterableIndexed)
+                {
+                    if (iterator.Current == Index)
+                        yield return Item;
+                }
+            }
+        }
+
+        public IEnumerable<T> Cycle<T>(IEnumerable<T> iterable)
+        {
+            ICollection<T> collection = new List<T>(iterable.Count());
+
+            foreach (T element in iterable)
+            {
+                yield return element;
+                collection.Add(element);
+            }
+
+            while (true)
+            {
+                foreach (T element in collection)
+                    yield return element;
+            }
+        }
+
+        public IEnumerable<T> Compress<T>(IEnumerable<T> iterable, IEnumerable<object> selectors)
+        {
+            foreach ((T Item, object Selector) in Zip(iterable, selectors))
+            {
+                if (Selector != null && Convert.ToBoolean(Selector.GetHashCode()))
+                    yield return Item;
+            }
+        }
+
+        public IEnumerable<T[]> Product<T>(params IEnumerable<T>[] iterables)
+        {
+            var result1 = new List<CustomArray<T>> { new CustomArray<T>() };
+            var result2 = new List<CustomArray<T>>();
+
+            foreach (var iterable in iterables)
+            {
+                foreach (var x in result1)
+                    foreach (var y in iterable)
+                        result2.Add(x + new CustomArray<T>(y));
+
+                result1 = new List<CustomArray<T>>(result2);
+                result2 = new List<CustomArray<T>>();
+            }
+
+            foreach (var r in result1)
+                yield return r;
+        }
+
+        public IEnumerable<T[]> Product<T>(IEnumerable<T> iterable, int repeat)
+        {
+            var iterables = new IEnumerable<T>[repeat];
+
+            for (int i = 0; i < repeat; i++)
+                iterables[i] = new List<T>(iterable);
+
+            foreach (T[] item in Product(iterables))
+                yield return item;
         }
 
         public IEnumerable<IEnumerable<T>> Combinations<T>(IEnumerable<T> iterable, int r)
@@ -81,90 +166,6 @@ namespace CSharpItertools
 
                 yield return output;
             }
-        }
-
-        public IEnumerable<T> IFilter<T>(Predicate<T> predicate, IEnumerable<T> iterable)
-        {
-            foreach (var item in iterable)
-                if (predicate(item)) yield return item;
-        }
-
-        public IEnumerable<T> IFilterFalse<T>(Predicate<T> predicate, IEnumerable<T> iterable)
-        {
-            foreach (var item in iterable)
-                if (!predicate(item)) yield return item;
-        }
-
-        public IEnumerable<T> ISlice<T>(IEnumerable<T> iterable, int start, int? stop = null, int step = 1)
-        {
-            IEnumerable<int> XRange(int startRange, int stopRange, int stepRange = 1)
-            {
-                for (; startRange < stopRange; startRange += stepRange)
-                    yield return startRange;
-            }
-
-            stop = stop ?? iterable.Count();
-
-            IEnumerator<int> iterator = XRange(start, stop.Value, step).GetEnumerator();
-            IEnumerable<(int, T)> iterableIndexed = IZip(Enumerable.Range(0, iterable.Count()), iterable);
-
-            while (iterator.MoveNext())
-            {
-                foreach ((int Index, T Item) in iterableIndexed)
-                {
-                    if (iterator.Current == Index)
-                        yield return Item;
-                }
-            }
-        }
-
-        public IEnumerable<T> Cycle<T>(IEnumerable<T> iterable)
-        {
-            ICollection<T> collection = new List<T>(iterable.Count());
-
-            foreach (T element in iterable)
-            {
-                yield return element;
-                collection.Add(element);
-            }
-
-            while (true)
-            {
-                foreach (T element in collection)
-                    yield return element;
-            }
-        }
-
-        public IEnumerable<T> Compress<T>(IEnumerable<T> iterable, IEnumerable<object> selectors)
-        {
-            foreach ((T Item, object Selector) in IZip(iterable, selectors))
-            {
-                if (Selector != null && Convert.ToBoolean(Selector.GetHashCode()))
-                    yield return Item;
-            }
-        }
-
-        public IEnumerable<T[]> Product<T>(params IEnumerable<T>[] iterables)
-        {
-            IList<CustomArray<T>> result = new List<CustomArray<T>> { new CustomArray<T>() };
-            IList<CustomArray<T>> resultAux = new List<CustomArray<T>>();
-
-            foreach (var iterable in iterables)
-            {
-                foreach (var x in result)
-                {
-                    foreach (var y in iterable)
-                    {
-                        resultAux.Add(x + new CustomArray<T>(y));
-                    }
-                }
-
-                result = new List<CustomArray<T>>(resultAux);
-                resultAux = new List<CustomArray<T>>();
-            }
-
-            foreach (var r in result)
-                yield return r;
         }
     }
 }
