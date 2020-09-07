@@ -227,7 +227,7 @@ namespace CSharpItertools.Tests
         }
 
         [Fact]
-        public void ProductOfInputInterables()
+        public void ProductOfInputIterables()
         {
             var iterable1 = "ABC";
             var iterable2 = "123";
@@ -245,6 +245,27 @@ namespace CSharpItertools.Tests
                 new char[] { 'C', '1' },
                 new char[] { 'C', '2' },
                 new char[] { 'C', '3' },
+            };
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void ProductOfInputIterablesAsInteger()
+        {
+            var iterable1 = new List<int> { 1, 2, 3 };
+            var iterable2 = new List<int> { 6, 7 };
+
+            var actual = itertools.Product(iterable1, iterable2);
+
+            var expected = new List<int[]>
+            {
+                new int[] { 1, 6 },
+                new int[] { 1, 7 },
+                new int[] { 2, 6 },
+                new int[] { 2, 7 },
+                new int[] { 3, 6 },
+                new int[] { 3, 7 }
             };
 
             Assert.Equal(expected, actual);
