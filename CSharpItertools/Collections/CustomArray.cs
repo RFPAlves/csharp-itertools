@@ -34,7 +34,7 @@ namespace CSharpItertools.Collections
 
         public static CustomArray<T> operator +(CustomArray<T> customArrayFirst, CustomArray<T> customArraySecond)
         {
-            var customArray = new CustomArray<T>(customArrayFirst.Length + customArraySecond.Length);
+            var customArray = new CustomArray<T>(size: customArrayFirst.Length + customArraySecond.Length);
 
             int i = 0;
 
@@ -56,8 +56,5 @@ namespace CSharpItertools.Collections
 
             return arr;
         }
-
-        public override string ToString()
-            => $"[{string.Join(", ", arr)}]";
     }
 }

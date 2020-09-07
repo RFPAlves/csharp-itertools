@@ -1,8 +1,8 @@
-﻿using CSharpItertools.Interfaces;
+﻿using CSharpItertools.Collections;
+using CSharpItertools.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 
 namespace CSharpItertools
 {
@@ -142,6 +142,29 @@ namespace CSharpItertools
                 if (Selector != null && Convert.ToBoolean(Selector.GetHashCode()))
                     yield return Item;
             }
+        }
+
+        public IEnumerable<T[]> Product<T>(params IEnumerable<T>[] iterables)
+        {
+            IList<CustomArray<T>> result = new List<CustomArray<T>> { new CustomArray<T>() };
+            IList<CustomArray<T>> resultAux = new List<CustomArray<T>>();
+
+            foreach (var iterable in iterables)
+            {
+                foreach (var x in result)
+                {
+                    foreach (var y in iterable)
+                    {
+                        resultAux.Add(x + new CustomArray<T>(y));
+                    }
+                }
+
+                result = new List<CustomArray<T>>(resultAux);
+                resultAux = new List<CustomArray<T>>();
+            }
+
+            foreach (var r in result)
+                yield return r;
         }
     }
 }

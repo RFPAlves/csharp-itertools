@@ -48,5 +48,10 @@ namespace CSharpItertools.Interfaces
         /// have a corresponding element in selectors that evaluates to True.
         /// </summary>
         IEnumerable<T> Compress<T>(IEnumerable<T> iterable, IEnumerable<object> selectors);
+
+        /// <summary>
+        /// Cartesian product of input iterables.
+        /// </summary>
+        IEnumerable<T[]> Product<T>(params IEnumerable<T>[] iterables);
     }
 }
