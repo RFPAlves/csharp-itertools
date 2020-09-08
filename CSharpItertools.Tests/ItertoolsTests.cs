@@ -266,7 +266,53 @@ namespace CSharpItertools.Tests
                 new char[] { 'Y', 'Z' },
                 new char[] { 'Z', 'X' },
                 new char[] { 'Z', 'Y' },
-                new char[] { 'Z', 'Z' },
+                new char[] { 'Z', 'Z' }
+            };
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void PermutationsOfElementsInTheIterable()
+        {
+            var iterable = "ABCD";
+
+            var actual = itertools.Permutations(iterable, 2);
+
+            var expected = new List<char[]>
+            {
+                new char[] { 'A', 'B' },
+                new char[] { 'A', 'C' },
+                new char[] { 'A', 'D' },
+                new char[] { 'B', 'A' },
+                new char[] { 'B', 'C' },
+                new char[] { 'B', 'D' },
+                new char[] { 'C', 'A' },
+                new char[] { 'C', 'B' },
+                new char[] { 'C', 'D' },
+                new char[] { 'D', 'A' },
+                new char[] { 'D', 'B' },
+                new char[] { 'D', 'C' }
+            };
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void PermutationsOfIntegerElementsInTheIterable()
+        {
+            var iterable = new int[] { 1, 2, 3 };
+
+            var actual = itertools.Permutations(iterable, r: 3);
+
+            var expected = new List<int[]>
+            {
+                new int[] { 1, 2, 3 },
+                new int[] { 1, 3, 2 },
+                new int[] { 2, 1, 3 },
+                new int[] { 2, 3, 1 },
+                new int[] { 3, 1, 2 },
+                new int[] { 3, 2, 1 }
             };
 
             Assert.Equal(expected, actual);

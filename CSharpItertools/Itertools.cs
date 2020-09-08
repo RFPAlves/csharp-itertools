@@ -124,6 +124,25 @@ namespace CSharpItertools
                 yield return item;
         }
 
+        public IEnumerable<T[]> Permutations<T>(IEnumerable<T> iterable, int r)
+        {
+            var newIterable = new List<T>(iterable);
+            int count = newIterable.Count;
+
+            foreach (int[] indices in Product(Enumerable.Range(0, count), repeat: r))
+            {
+                if (indices.Distinct().Count() == r)
+                {
+                    var result = new T[r];
+
+                    for (int i = 0; i < indices.Length; i++)
+                        result[i] = newIterable[indices[i]];
+
+                    yield return result;
+                }
+            }
+        }
+
         public IEnumerable<IEnumerable<T>> Combinations<T>(IEnumerable<T> iterable, int r)
         {
             int n = iterable.Count();

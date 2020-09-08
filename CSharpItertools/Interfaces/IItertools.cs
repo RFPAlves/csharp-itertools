@@ -49,6 +49,11 @@ namespace CSharpItertools.Interfaces
         IEnumerable<T[]> Product<T>(IEnumerable<T> iterable, int repeat);
 
         /// <summary>
+        /// Return successive r length permutations of elements in the iterable.
+        /// </summary>
+        IEnumerable<T[]> Permutations<T>(IEnumerable<T> iterable, int r);
+
+        /// <summary>
         /// Return r length subsequences of elements from the input iterable
         /// </summary>
         IEnumerable<IEnumerable<T>> Combinations<T>(IEnumerable<T> iterable, int r);
