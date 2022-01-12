@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace CSharpItertools
 {
-    public class Itertools : IItertools
+    public sealed class Itertools : IItertools
     {
         public IEnumerable<(T1, T2)> Zip<T1, T2>(IEnumerable<T1> iterable1, IEnumerable<T2> iterable2)
         {
@@ -47,13 +47,13 @@ namespace CSharpItertools
 
         public IEnumerable<T> ISlice<T>(IEnumerable<T> iterable, int start, int? stop = null, int step = 1)
         {
-            IEnumerable<int> XRange(int startRange, int stopRange, int stepRange = 1)
+            static IEnumerable<int> XRange(int startRange, int stopRange, int stepRange = 1)
             {
                 for (; startRange < stopRange; startRange += stepRange)
                     yield return startRange;
             }
 
-            stop = stop ?? iterable.Count();
+            stop ??= iterable.Count();
 
             IEnumerator<int> iterator = XRange(start, stop.Value, step).GetEnumerator();
             IEnumerable<(int, T)> iterableIndexed = Zip(Enumerable.Range(0, iterable.Count()), iterable);
