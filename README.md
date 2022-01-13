@@ -1,2 +1,2 @@
 # CSharp Itertools
-Python 3 itertools based C# library
+C# library based on Python 3 itertools
