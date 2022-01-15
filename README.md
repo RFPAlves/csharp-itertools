@@ -1,8 +1,10 @@
-CSharp Itertools
+CSharp Itertools 
 ================
 
 [![downloads](https://img.shields.io/nuget/dt/CSharpItertools)](https://www.nuget.org/packages/CSharpItertools/)
 [![latest version](https://img.shields.io/nuget/v/CSharpItertools)](https://www.nuget.org/packages/CSharpItertools/)
+[![build status](https://img.shields.io/appveyor/build/RFPAlves/csharp-itertools/master)](https://ci.appveyor.com/project/RFPAlves/csharp-itertools/branch/master)
+[![test results](https://img.shields.io/appveyor/tests/RFPAlves/csharp-itertools/master)](https://ci.appveyor.com/project/RFPAlves/csharp-itertools/branch/master/tests)
 
 This library implements a number of iterator building blocks inspired by Python 3 itertools module. Each has been recast in a form suitable for C#.
 
